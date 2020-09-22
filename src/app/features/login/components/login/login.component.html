@@ -1,1 +1,31 @@
-<p>login works!</p>
+<div class="container">
+  <form class="login" [formGroup]="loginForm" (ngSubmit)="submitLoginForm()" novalidate>
+    <h1 class="login__title">Please log in</h1>
+    <label for="email" class="login__label">Login</label>
+    <input
+      type="email"
+      id="email"
+      class="login__input"
+      placeholder="Login"
+      autofocus
+      formControlName="login"
+      [ngClass]="{'login__input--error': isLoginInvalid}"
+    >
+    <label for="password" class="login__label">Password</label>
+    <div class="login__password">
+      <input
+        [type]="inputType"
+        id="password"
+        class="login__input"
+        placeholder="Password"
+        formControlName="password"
+        [ngClass]="{'login__input--error': isPasswordInvalid,
+                    'login__input--spacing': inputType === 'password'}"
+      >
+      <svg class="login__icon" (click)="showPassword()">
+        <use [attr.xlink:href]="showPasswordIcon"></use>
+      </svg>
+    </div>
+    <button type="submit" class="login__button" [disabled]="loginForm.invalid">Log in</button>
+  </form>
+</div>

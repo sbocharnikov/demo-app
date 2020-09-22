@@ -1,19 +1,20 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { NAVIGATE } from './app.config';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: NAVIGATE.LOGIN,
     pathMatch: 'full'
   },
   {
-    path: 'login',
+    path: NAVIGATE.LOGIN,
     loadChildren: () =>
       import('./features/login/login.module').then((m) => m.LoginModule),
   },
   {
-    path: 'main',
+    path: NAVIGATE.MAIN,
     loadChildren: () =>
       import('./features/main/main.module').then((m) => m.MainModule),
   },

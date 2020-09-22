@@ -1,0 +1,71 @@
+@import "src/styles/variables";
+@import "src/styles/elements";
+
+.container {
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login {
+  width: 100%;
+  max-width: 320px;
+  padding: 15px;
+  border-radius: 5px;
+  background-color: $color-white;
+  box-shadow: 0 1px 24px 0 $color-dark-opacity;
+
+  &__title {
+    text-align: center;
+  }
+
+  &__input {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 20px;
+    border: solid 1px $color-pale-grey;
+    border-radius: 4px;
+    transition: border-color $hover-effect-delay;
+
+    &:hover,
+    &:focus {
+      border-color: $color-dark;
+    }
+
+    &--spacing {
+      letter-spacing: 2px;
+      padding-right: 30px;
+
+      &::placeholder {
+        letter-spacing: 0;
+      }
+    }
+
+    &--error {
+      border-color: $color-red;
+    }
+  }
+
+  &__password {
+    position: relative;
+  }
+
+  &__icon {
+    position: absolute;
+    top: 9px;
+    right: 7px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+
+  &__button {
+    @extend .button;
+
+    display: block;
+    width: 100%;
+  }
+}
