@@ -21,6 +21,7 @@
         placeholder="Password"
         autocomplete="off"
         formControlName="password"
+        appRestrictInput="only-latin-and-numbers"
         [ngClass]="{'login__input--error': isPasswordInvalid,
                     'login__input--spacing': inputType === 'password'}"
       >
