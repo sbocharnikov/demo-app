@@ -1,1 +1,15 @@
-<p>pin works!</p>
+<div class="container">
+  <form class="pin" [formGroup]="pinForm" (ngSubmit)="submitPinForm()" novalidate>
+    <h1 class="pin__title">Please input PIN</h1>
+    <input
+      type="text"
+      class="pin__input"
+      placeholder="XXXX"
+      autofocus
+      autocomplete="off"
+      formControlName="pin"
+      appRestrictInput="only-numbers"
+    >
+    <button type="submit" class="pin__button" [disabled]="pinForm.invalid || isSubmitting">Confirm</button>
+  </form>
+</div>

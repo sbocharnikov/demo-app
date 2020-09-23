@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PinComponent } from './components/pin/pin.component';
 import { NAVIGATE } from '../../app.config';
+import { PinGuard } from './guards/pin.guard';
+import { RestrictInputDirective } from '../../shared/directives/restrict-input.directive';
 
 const routes = [
   {
@@ -14,16 +16,18 @@ const routes = [
   {
     path: NAVIGATE.PIN,
     component: PinComponent,
+    canActivate: [PinGuard],
   },
 ];
 
 @NgModule({
-  declarations: [LoginComponent, PinComponent],
+  declarations: [LoginComponent, PinComponent, RestrictInputDirective],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
     ReactiveFormsModule
-  ]
+  ],
+  providers: [PinGuard]
 })
 export class LoginModule {
 }

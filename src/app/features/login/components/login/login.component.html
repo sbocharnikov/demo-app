@@ -8,6 +8,7 @@
       class="login__input"
       placeholder="Login"
       autofocus
+      autocomplete="off"
       formControlName="login"
       [ngClass]="{'login__input--error': isLoginInvalid}"
     >
@@ -18,6 +19,7 @@
         id="password"
         class="login__input"
         placeholder="Password"
+        autocomplete="off"
         formControlName="password"
         [ngClass]="{'login__input--error': isPasswordInvalid,
                     'login__input--spacing': inputType === 'password'}"
@@ -26,6 +28,6 @@
         <use [attr.xlink:href]="showPasswordIcon"></use>
       </svg>
     </div>
-    <button type="submit" class="login__button" [disabled]="loginForm.invalid">Log in</button>
+    <button type="submit" class="login__button" [disabled]="loginForm.invalid || isSubmitting">Log in</button>
   </form>
 </div>
