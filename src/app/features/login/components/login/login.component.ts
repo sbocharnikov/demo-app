@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { INPUT_TYPE, SVG } from './login.config';
-import { catchError, filter, finalize, takeUntil, tap } from 'rxjs/operators';
+import { catchError, filter, finalize, take, takeUntil, tap } from 'rxjs/operators';
 import { AuthService } from '../../../../shared/services/auth.service';
 import { BehaviorSubject, EMPTY, Observable, Subject } from 'rxjs';
 import { LoginResponseInterface } from '../../models/loginResponse.interface';
@@ -17,23 +17,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   inputType: string = INPUT_TYPE.PASSWORD;
   showPasswordIcon: string = SVG.EYE;
   isSubmitting: boolean = false;
-  isLoginFailed: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private isLoginFailedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private isDestroyed: Subject<boolean> = new Subject();
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService
   ) {
-  }
-
-  ngOnInit(): void {
-    this.initializeForm();
-    this.initializeSubscriptions();
-  }
-
-  ngOnDestroy(): void {
-    this.isDestroyed.next(true);
-    this.isDestroyed.complete();
   }
 
   get login(): FormControl {
@@ -52,11 +42,25 @@ export class LoginComponent implements OnInit, OnDestroy {
     return this.password.invalid && this.password.dirty;
   }
 
+  get isLoginFailed(): Observable<boolean> {
+    return this.isLoginFailedSubject.asObservable();
+  }
+
+  ngOnInit(): void {
+    this.initializeForm();
+    this.initializeSubscriptions();
+  }
+
+  ngOnDestroy(): void {
+    this.isDestroyed.next(true);
+    this.isDestroyed.complete();
+  }
+
   submitLoginForm(): void {
-    this.isLoginFailed.next(false);
     if (this.loginForm.valid) {
       this.isSubmitting = true;
       this.authService.login(this.loginForm.value).pipe(
+        take(1),
         catchError(this.handleLoginError),
         finalize(() => this.isSubmitting = false)
       ).subscribe();
@@ -71,32 +75,32 @@ export class LoginComponent implements OnInit, OnDestroy {
   private initializeForm(): void {
     this.loginForm = this.fb.group({
         login: ['', {
-          validators: [Validators.required, Validators.email, Validators.maxLength(30)],
+          validators: [Validators.required, Validators.email],
+          updateOn: 'blur'
         }],
         password: ['', {
-          validators: [Validators.required],
+          validators: [Validators.required]
         }]
       },
-      { updateOn: 'blur' }
     );
   }
 
   private initializeSubscriptions(): void {
     this.login.valueChanges.pipe(
       filter(value => value?.length),
-      tap(() => this.isLoginFailed.next(false)),
+      tap(() => this.isLoginFailedSubject.next(false)),
       takeUntil(this.isDestroyed)
     ).subscribe();
     this.password.valueChanges.pipe(
       filter(value => value?.length),
-      tap(() => this.isLoginFailed.next(false)),
+      tap(() => this.isLoginFailedSubject.next(false)),
       takeUntil(this.isDestroyed)
     ).subscribe();
   }
 
   private handleLoginError = (error: LoginResponseInterface): Observable<never> => {
     if (error.result === 'Error') {
-      this.isLoginFailed.next(true);
+      this.isLoginFailedSubject.next(true);
       this.loginForm.reset();
     }
     return EMPTY;

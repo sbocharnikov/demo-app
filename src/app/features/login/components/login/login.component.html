@@ -1,8 +1,8 @@
 <div class="container">
   <form class="login" [formGroup]="loginForm" (ngSubmit)="submitLoginForm()" novalidate>
     <h1 class="login__title">Please log in</h1>
-    <div *ngIf="isLoginFailed | async" class="login__error">
-      Login or password is incorrect
+    <div *ngIf="isLoginFailed | async" class="login__error login__error--center">
+      Incorrect login or password
     </div>
     <div class="login__group">
       <label for="login" class="login__label">Login</label>
@@ -14,13 +14,11 @@
         autofocus
         autocomplete="off"
         formControlName="login"
+        appMaxLength="30"
         [ngClass]="{'login__input--invalid': isLoginInvalid}"
       >
-      <div *ngIf="login.errors?.maxlength" class="login__error">
-        Login should be less than 30 characters
-      </div>
       <div *ngIf="login.errors?.email" class="login__error">
-        Email should be used as login
+        Please use valid email
       </div>
       <div *ngIf="login.errors?.required && login.dirty" class="login__error">
         Login should not be empty

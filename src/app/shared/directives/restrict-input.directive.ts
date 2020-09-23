@@ -1,10 +1,10 @@
 import { Directive, HostListener, Input } from '@angular/core';
+import { allowedKeys } from '../../app.config';
 
 @Directive({
   selector: '[appRestrictInput]'
 })
 export class RestrictInputDirective {
-  allowedKeys: string[] = ['Delete', 'Backspace', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Shift', 'Home', 'End'];
   notNumbers: RegExp = /[^0-9]/g;
   notLatinAndNumbers: RegExp = /[^0-9A-Za-z]/g;
 
@@ -12,7 +12,7 @@ export class RestrictInputDirective {
 
   @HostListener('keydown', ['$event'])
   onKeyDown(e: KeyboardEvent): void {
-    if (this.allowedKeys.indexOf(e.key) !== -1 ||
+    if (allowedKeys.indexOf(e.key) !== -1 ||
       (e.key === 'a' && (e.ctrlKey || e.metaKey)) ||
       (e.key === 'c' && (e.ctrlKey || e.metaKey)) ||
       (e.key === 'v' && (e.ctrlKey || e.metaKey)) ||

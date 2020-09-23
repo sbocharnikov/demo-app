@@ -9,3 +9,5 @@ export enum USER {
   password = 'new123',
   pin = '4567'
 }
+
+export const allowedKeys: string[] = ['Delete', 'Backspace', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Shift', 'Home', 'End'];

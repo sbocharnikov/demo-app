@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-pin',
@@ -10,8 +11,21 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class PinComponent implements OnInit {
   pinForm: FormGroup;
   isSubmitting: boolean = false;
+  private isPinFailedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(private fb: FormBuilder) {
+  }
+
+  get pin(): FormControl {
+    return this.pinForm.get('pin') as FormControl;
+  }
+
+  get isPinInvalid(): boolean {
+    return this.pin.invalid && this.pin.dirty;
+  }
+
+  get isPinFailed(): Observable<boolean> {
+    return this.isPinFailedSubject.asObservable();
   }
 
   ngOnInit(): void {
@@ -19,11 +33,16 @@ export class PinComponent implements OnInit {
   }
 
   submitPinForm(): void {
+    this.pin.markAsDirty();
+    if (this.pinForm.valid) {}
   }
 
   private initializeForm(): void {
     this.pinForm = this.fb.group({
-      pin: ['', Validators.required]
+      pin: ['', {
+        validators: [Validators.required, Validators.minLength(4)],
+        updateOn: 'blur'
+      }]
     });
   }
 }

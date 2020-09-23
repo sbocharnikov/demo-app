@@ -20,3 +20,23 @@
     cursor: default;
   }
 }
+
+.input {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: solid 1px $color-pale-grey;
+  border-radius: 4px;
+  transition: border-color $hover-effect-delay;
+
+  &:hover,
+  &:focus {
+    border-color: $color-dark;
+  }
+
+  &--invalid {
+    border-color: $color-red;
+  }
+}

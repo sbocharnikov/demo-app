@@ -26,19 +26,7 @@
   }
 
   &__input {
-    display: block;
-    box-sizing: border-box;
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    border: solid 1px $color-pale-grey;
-    border-radius: 4px;
-    transition: border-color $hover-effect-delay;
-
-    &:hover,
-    &:focus {
-      border-color: $color-dark;
-    }
+    @extend .input;
 
     &--spacing {
       letter-spacing: 2px;
@@ -50,7 +38,7 @@
     }
 
     &--invalid {
-      border-color: $color-red;
+      @extend .input--invalid;
     }
   }
 
@@ -66,6 +54,10 @@
   &__error {
     font-size: 0.8em;
     color: $color-red;
+
+    &--center {
+      text-align: center;
+    }
   }
 
   &__button {

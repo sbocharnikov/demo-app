@@ -21,32 +21,20 @@
   }
 
   &__input {
-    display: block;
-    box-sizing: border-box;
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0 20px;
-    border: solid 1px $color-pale-grey;
-    border-radius: 4px;
-    transition: border-color $hover-effect-delay;
+    @extend .input;
 
-    &:hover,
-    &:focus {
-      border-color: $color-dark;
+    width: 4em;
+    margin: 5px auto;
+
+    &--invalid {
+      @extend .input--invalid;
     }
+  }
 
-    &--spacing {
-      letter-spacing: 2px;
-      padding-right: 30px;
-
-      &::placeholder {
-        letter-spacing: 0;
-      }
-    }
-
-    &--error {
-      border-color: $color-red;
-    }
+  &__error {
+    font-size: 0.8em;
+    color: $color-red;
+    text-align: center;
   }
 
   &__button {
@@ -54,5 +42,6 @@
 
     display: block;
     width: 100%;
+    margin-top: 15px;
   }
 }

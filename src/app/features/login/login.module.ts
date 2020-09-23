@@ -7,6 +7,7 @@ import { PinComponent } from './components/pin/pin.component';
 import { NAVIGATE } from '../../app.config';
 import { PinGuard } from './guards/pin.guard';
 import { RestrictInputDirective } from '../../shared/directives/restrict-input.directive';
+import { MaxLengthDirective } from '../../shared/directives/max-length.directive';
 
 const routes = [
   {
@@ -21,7 +22,12 @@ const routes = [
 ];
 
 @NgModule({
-  declarations: [LoginComponent, PinComponent, RestrictInputDirective],
+  declarations: [
+    LoginComponent,
+    PinComponent,
+    RestrictInputDirective,
+    MaxLengthDirective
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
