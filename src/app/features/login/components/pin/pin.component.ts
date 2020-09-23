@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable } from 'rxjs';
+import { AuthService } from '../../../../shared/services/auth.service';
+import { catchError, finalize, take } from 'rxjs/operators';
+import { PinResponseInterface } from '../../models/pinResponse.interface';
 
 @Component({
   selector: 'app-pin',
@@ -13,7 +16,7 @@ export class PinComponent implements OnInit {
   isSubmitting: boolean = false;
   private isPinFailedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private authService: AuthService) {
   }
 
   get pin(): FormControl {
@@ -34,7 +37,15 @@ export class PinComponent implements OnInit {
 
   submitPinForm(): void {
     this.pin.markAsDirty();
-    if (this.pinForm.valid) {}
+    this.isPinFailedSubject.next(false);
+    if (this.pinForm.valid) {
+      this.isSubmitting = true;
+      this.authService.confirmPin(this.pinForm.value).pipe(
+        take(1),
+        catchError(this.handleConfirmPinError),
+        finalize(() => this.isSubmitting = false)
+      ).subscribe();
+    }
   }
 
   private initializeForm(): void {
@@ -43,6 +54,14 @@ export class PinComponent implements OnInit {
         validators: [Validators.required, Validators.minLength(4)],
         updateOn: 'blur'
       }]
-    });
+    }, { updateOn: 'submit' });
+  }
+
+  private handleConfirmPinError = (error: PinResponseInterface): Observable<never> => {
+    if (error.status === 'Error') {
+      this.isPinFailedSubject.next(true);
+      this.pinForm.reset();
+    }
+    return EMPTY;
   }
 }

@@ -1,0 +1,13 @@
+@import "src/styles/variables";
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  &__text {
+    font-size: 30px;
+    text-shadow: 4px 4px 2px $color-grey;
+  }
+}

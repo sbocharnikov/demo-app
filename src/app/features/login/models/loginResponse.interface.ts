@@ -1,3 +1,3 @@
 export interface LoginResponseInterface {
-  result: 'OK' | 'Error';
+  status: 'OK' | 'Error';
 }

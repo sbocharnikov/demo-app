@@ -1,20 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MainComponent } from './components/main/main.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 import { Route, RouterModule } from '@angular/router';
 
 const routes: Route[] = [
-  {
-    path: '',
-    component: MainComponent,
-  },
+  { path: '', component: NotFoundComponent }
 ];
 
 @NgModule({
-  declarations: [MainComponent],
+  declarations: [NotFoundComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes)
   ]
 })
-export class MainModule { }
+export class NotFoundModule { }

@@ -1,9 +1,6 @@
 <div class="container">
   <form class="pin" [formGroup]="pinForm" (ngSubmit)="submitPinForm()" novalidate>
     <h1 class="pin__title">Please input PIN</h1>
-    <div *ngIf="isPinFailed | async" class="pin__error">
-      Incorrect login or password
-    </div>
     <input
       type="text"
       id="pin"
@@ -16,6 +13,9 @@
       appMaxLength="4"
       [ngClass]="{'pin__input--invalid': isPinInvalid}"
     >
+    <div *ngIf="isPinFailed | async" class="pin__error">
+      Incorrect pin
+    </div>
     <div *ngIf="isPinInvalid" class="pin__error">
       Pin should be 4 characters long
     </div>

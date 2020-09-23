@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { MainGuard } from './features/main/guards/main.guard';
+import { LoginGuard } from './features/login/guards/login.guard';
 
 @NgModule({
   declarations: [
@@ -12,6 +14,7 @@ import { AppComponent } from './app.component';
     BrowserModule,
     AppRoutingModule
   ],
+  providers: [LoginGuard, MainGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

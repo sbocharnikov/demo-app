@@ -99,7 +99,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private handleLoginError = (error: LoginResponseInterface): Observable<never> => {
-    if (error.result === 'Error') {
+    if (error.status === 'Error') {
       this.isLoginFailedSubject.next(true);
       this.loginForm.reset();
     }
