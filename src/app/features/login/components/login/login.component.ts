@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { INPUT_TYPE, SVG } from './login.config';
-import { catchError, finalize } from 'rxjs/operators';
+import { catchError, filter, finalize, takeUntil, tap } from 'rxjs/operators';
 import { AuthService } from '../../../../shared/services/auth.service';
-import { BehaviorSubject, EMPTY, Observable } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, Subject } from 'rxjs';
 import { LoginResponseInterface } from '../../models/loginResponse.interface';
 
 @Component({
@@ -12,12 +12,13 @@ import { LoginResponseInterface } from '../../models/loginResponse.interface';
   styleUrls: ['./login.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   inputType: string = INPUT_TYPE.PASSWORD;
   showPasswordIcon: string = SVG.EYE;
   isSubmitting: boolean = false;
   isLoginFailed: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private isDestroyed: Subject<boolean> = new Subject();
 
   constructor(
     private fb: FormBuilder,
@@ -27,6 +28,12 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeForm();
+    this.initializeSubscriptions();
+  }
+
+  ngOnDestroy(): void {
+    this.isDestroyed.next(true);
+    this.isDestroyed.complete();
   }
 
   get login(): FormControl {
@@ -74,9 +81,23 @@ export class LoginComponent implements OnInit {
     );
   }
 
+  private initializeSubscriptions(): void {
+    this.login.valueChanges.pipe(
+      filter(value => value?.length),
+      tap(() => this.isLoginFailed.next(false)),
+      takeUntil(this.isDestroyed)
+    ).subscribe();
+    this.password.valueChanges.pipe(
+      filter(value => value?.length),
+      tap(() => this.isLoginFailed.next(false)),
+      takeUntil(this.isDestroyed)
+    ).subscribe();
+  }
+
   private handleLoginError = (error: LoginResponseInterface): Observable<never> => {
     if (error.result === 'Error') {
       this.isLoginFailed.next(true);
+      this.loginForm.reset();
     }
     return EMPTY;
   }
