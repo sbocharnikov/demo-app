@@ -20,12 +20,17 @@
     text-align: center;
   }
 
+  &__group {
+    position: relative;
+    margin-bottom: 15px;
+  }
+
   &__input {
     display: block;
     box-sizing: border-box;
     width: 100%;
     padding: 10px;
-    margin: 5px 0 20px;
+    margin: 5px 0;
     border: solid 1px $color-pale-grey;
     border-radius: 4px;
     transition: border-color $hover-effect-delay;
@@ -44,22 +49,23 @@
       }
     }
 
-    &--error {
+    &--invalid {
       border-color: $color-red;
     }
   }
 
-  &__password {
-    position: relative;
-  }
-
   &__icon {
     position: absolute;
-    top: 9px;
+    top: 29px;
     right: 7px;
     width: 20px;
     height: 20px;
     cursor: pointer;
+  }
+
+  &__error {
+    font-size: 0.8em;
+    color: $color-red;
   }
 
   &__button {

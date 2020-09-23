@@ -19,7 +19,6 @@ export class PinComponent implements OnInit {
   }
 
   submitPinForm(): void {
-
   }
 
   private initializeForm(): void {

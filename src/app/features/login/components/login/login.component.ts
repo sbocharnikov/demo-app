@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { INPUT_TYPE, SVG } from './login.config';
 import { catchError, finalize } from 'rxjs/operators';
 import { AuthService } from '../../../../shared/services/auth.service';
-import { EMPTY, Observable } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable } from 'rxjs';
 import { LoginResponseInterface } from '../../models/loginResponse.interface';
 
 @Component({
@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
   inputType: string = INPUT_TYPE.PASSWORD;
   showPasswordIcon: string = SVG.EYE;
   isSubmitting: boolean = false;
+  isLoginFailed: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(
     private fb: FormBuilder,
@@ -45,6 +46,7 @@ export class LoginComponent implements OnInit {
   }
 
   submitLoginForm(): void {
+    this.isLoginFailed.next(false);
     if (this.loginForm.valid) {
       this.isSubmitting = true;
       this.authService.login(this.loginForm.value).pipe(
@@ -63,23 +65,18 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.fb.group({
         login: ['', {
           validators: [Validators.required, Validators.email, Validators.maxLength(30)],
-          updateOn: 'blur'
         }],
         password: ['', {
-          validators: [Validators.required, Validators.pattern(/[a-z0-9]+/gi)],
-          updateOn: 'blur'
+          validators: [Validators.required],
         }]
       },
-      { updateOn: 'submit' }
+      { updateOn: 'blur' }
     );
   }
 
   private handleLoginError = (error: LoginResponseInterface): Observable<never> => {
     if (error.result === 'Error') {
-      this.login.markAsDirty();
-      this.login.setErrors({invalid: true});
-      this.password.markAsDirty();
-      this.password.setErrors({invalid: true});
+      this.isLoginFailed.next(true);
     }
     return EMPTY;
   }

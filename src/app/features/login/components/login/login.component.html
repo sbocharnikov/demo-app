@@ -1,19 +1,33 @@
 <div class="container">
   <form class="login" [formGroup]="loginForm" (ngSubmit)="submitLoginForm()" novalidate>
     <h1 class="login__title">Please log in</h1>
-    <label for="email" class="login__label">Login</label>
-    <input
-      type="email"
-      id="email"
-      class="login__input"
-      placeholder="Login"
-      autofocus
-      autocomplete="off"
-      formControlName="login"
-      [ngClass]="{'login__input--error': isLoginInvalid}"
-    >
-    <label for="password" class="login__label">Password</label>
-    <div class="login__password">
+    <div *ngIf="isLoginFailed | async" class="login__error">
+      Login or password is incorrect
+    </div>
+    <div class="login__group">
+      <label for="login" class="login__label">Login</label>
+      <input
+        type="email"
+        id="login"
+        class="login__input"
+        placeholder="Login"
+        autofocus
+        autocomplete="off"
+        formControlName="login"
+        [ngClass]="{'login__input--invalid': isLoginInvalid}"
+      >
+      <div *ngIf="login.errors?.maxlength" class="login__error">
+        Login should be less than 30 characters
+      </div>
+      <div *ngIf="login.errors?.email" class="login__error">
+        Email should be used as login
+      </div>
+      <div *ngIf="login.errors?.required && login.dirty" class="login__error">
+        Login should not be empty
+      </div>
+    </div>
+    <div class="login__group">
+      <label for="password" class="login__label">Password</label>
       <input
         [type]="inputType"
         id="password"
@@ -22,12 +36,15 @@
         autocomplete="off"
         formControlName="password"
         appRestrictInput="only-latin-and-numbers"
-        [ngClass]="{'login__input--error': isPasswordInvalid,
+        [ngClass]="{'login__input--invalid': isPasswordInvalid,
                     'login__input--spacing': inputType === 'password'}"
       >
       <svg class="login__icon" (click)="showPassword()">
         <use [attr.xlink:href]="showPasswordIcon"></use>
       </svg>
+      <div *ngIf="password.errors?.required && password.dirty" class="login__error">
+        Password should not be empty
+      </div>
     </div>
     <button type="submit" class="login__button" [disabled]="loginForm.invalid || isSubmitting">Log in</button>
   </form>

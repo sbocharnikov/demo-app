@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError, timer } from 'rxjs';
 import { LoginRequestInterface } from '../../features/login/models/loginRequest.interface';
 import { LoginResponseInterface } from '../../features/login/models/loginResponse.interface';
 import { NAVIGATE, USER } from '../../app.config';
-import { delay, tap } from 'rxjs/operators';
+import { delay, switchMap, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -20,13 +20,13 @@ export class AuthService {
   }
 
   login({ login, password }: LoginRequestInterface): Observable<LoginResponseInterface> {
- //   if (login === USER.login && password === USER.password) {
+   if (login === USER.login && password === USER.password) {
       return of<LoginResponseInterface>({ result: 'OK' }).pipe(
-        delay(200),
+        delay(300),
         tap(() => this.handleSuccessfulLogin())
       );
-  //  }
-   // return throwError({ result: 'Error' }).pipe(delay(100));
+   }
+   return timer(300).pipe(switchMap(() => throwError({ result: 'Error' })));
   }
 
   private handleSuccessfulLogin(): void {

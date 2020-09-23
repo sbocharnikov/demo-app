@@ -17,5 +17,6 @@
   &:disabled {
     background-color: $color-pale-grey;
     border-color: $color-pale-grey;
+    cursor: default;
   }
 }
