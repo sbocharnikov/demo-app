@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { AuthService } from '../../shared/services/auth.service';
 import { Observable } from 'rxjs';
 
@@ -8,10 +8,14 @@ import { Observable } from 'rxjs';
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   isAuthenticated: Observable<boolean> = this.authService.isAuthenticated;
 
   constructor(private authService: AuthService) {
+  }
+
+  ngOnInit(): void {
+    this.authService.checkToken();
   }
 
   logout(): void {

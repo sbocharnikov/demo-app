@@ -54,6 +54,13 @@ export class AuthService {
     sessionStorage.removeItem('token');
   }
 
+  checkToken(): void {
+    if (sessionStorage.getItem('token')) {
+      this.isLoggedInSubject.next(true);
+      this.isAuthenticatedSubject.next(true);
+    }
+  }
+
   private handleSuccessfulLogin(): void {
     this.isLoggedInSubject.next(true);
     this.router.navigate([NAVIGATE.LOGIN, NAVIGATE.PIN]);
