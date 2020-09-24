@@ -11,14 +11,11 @@
       formControlName="pin"
       appRestrictInput="only-numbers"
       appMaxLength="4"
-      [ngClass]="{'pin__input--invalid': isPinInvalid}"
+      [ngClass]="{'pin__input--invalid': isPinFailed | async}"
     >
     <div *ngIf="isPinFailed | async" class="pin__error">
       Incorrect pin
     </div>
-    <div *ngIf="isPinInvalid" class="pin__error">
-      Pin should be 4 characters long
-    </div>
-    <button type="submit" class="pin__button" [disabled]="isSubmitting">Confirm</button>
+    <button type="submit" class="pin__button" [disabled]="pin.invalid || isSubmitting">Confirm</button>
   </form>
 </div>

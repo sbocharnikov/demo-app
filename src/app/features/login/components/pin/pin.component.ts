@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { BehaviorSubject, EMPTY, Observable } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, Subject } from 'rxjs';
+import { catchError, filter, finalize, take, takeUntil, tap } from 'rxjs/operators';
 import { AuthService } from '../../../../shared/services/auth.service';
-import { catchError, finalize, take } from 'rxjs/operators';
 import { PinResponseInterface } from '../../models/pinResponse.interface';
 
 @Component({
@@ -11,10 +11,11 @@ import { PinResponseInterface } from '../../models/pinResponse.interface';
   styleUrls: ['./pin.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PinComponent implements OnInit {
+export class PinComponent implements OnInit, OnDestroy {
   pinForm: FormGroup;
   isSubmitting: boolean = false;
   private isPinFailedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private isDestroyed: Subject<boolean> = new Subject();
 
   constructor(private fb: FormBuilder, private authService: AuthService) {
   }
@@ -23,21 +24,21 @@ export class PinComponent implements OnInit {
     return this.pinForm.get('pin') as FormControl;
   }
 
-  get isPinInvalid(): boolean {
-    return this.pin.invalid && this.pin.dirty;
-  }
-
   get isPinFailed(): Observable<boolean> {
     return this.isPinFailedSubject.asObservable();
   }
 
   ngOnInit(): void {
     this.initializeForm();
+    this.initializeSubscriptions();
+  }
+
+  ngOnDestroy(): void {
+    this.isDestroyed.next(true);
+    this.isDestroyed.complete();
   }
 
   submitPinForm(): void {
-    this.pin.markAsDirty();
-    this.isPinFailedSubject.next(false);
     if (this.pinForm.valid) {
       this.isSubmitting = true;
       this.authService.confirmPin(this.pinForm.value).pipe(
@@ -52,9 +53,16 @@ export class PinComponent implements OnInit {
     this.pinForm = this.fb.group({
       pin: ['', {
         validators: [Validators.required, Validators.minLength(4)],
-        updateOn: 'blur'
       }]
-    }, { updateOn: 'submit' });
+    });
+  }
+
+  private initializeSubscriptions(): void {
+    this.pin.valueChanges.pipe(
+      filter(value => value?.length),
+      tap(() => this.isPinFailedSubject.next(false)),
+      takeUntil(this.isDestroyed)
+    ).subscribe();
   }
 
   private handleConfirmPinError = (error: PinResponseInterface): Observable<never> => {
