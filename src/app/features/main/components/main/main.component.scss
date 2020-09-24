@@ -1,0 +1,43 @@
+@import "src/styles/variables";
+
+.container {
+  display: flex;
+  min-height: calc(100vh - 150px);
+}
+
+.sidebar {
+  width: 200px;
+  padding: 5px;
+  background-color: $color-white;
+
+  &__list {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    cursor: pointer;
+
+    &:hover {
+      color: lighten($color-dark, 10%);
+      fill: lighten($color-dark, 10%);
+    }
+  }
+
+  &__icon {
+    width: 20px;
+    height: 20px;
+    margin: 5px;
+  }
+}
+
+.main {
+  width: 100%;
+  margin-left: 10px;
+  background-color: $color-white;
+}
+
+

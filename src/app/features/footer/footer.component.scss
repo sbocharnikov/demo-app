@@ -1,0 +1,10 @@
+@import "src/styles/variables";
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 65px;
+  background-color: $color-charcoal;
+  color: $color-pale-grey;
+}
