@@ -47,6 +47,13 @@ export class AuthService {
     return timer(this.fakeResponseDelay).pipe(switchMap(() => throwError({ status: 'Error' })));
   }
 
+  logout(): void {
+    this.isLoggedInSubject.next(false);
+    this.isAuthenticatedSubject.next(false);
+    this.router.navigate([NAVIGATE.LOGIN]);
+    sessionStorage.removeItem('token');
+  }
+
   private handleSuccessfulLogin(): void {
     this.isLoggedInSubject.next(true);
     this.router.navigate([NAVIGATE.LOGIN, NAVIGATE.PIN]);
