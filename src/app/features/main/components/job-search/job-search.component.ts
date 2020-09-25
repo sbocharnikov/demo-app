@@ -18,6 +18,7 @@ export class JobSearchComponent implements OnInit, OnDestroy {
   jobs: Observable<JobInterface[]> = this.searchService.jobs;
   isAllJobsLoaded: Observable<boolean> = this.searchService.isAllJobsLoaded;
   isJobNotFound: Observable<boolean> = this.searchService.isJobNotFound;
+  isLoading: Observable<boolean> = this.searchService.isLoading;
   private isLoadMoreClicked: boolean = false;
   private isSearchClicked: boolean = false;
   private isDestroyed: Subject<boolean> = new Subject<boolean>();

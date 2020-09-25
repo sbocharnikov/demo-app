@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { finalize, tap } from 'rxjs/operators';
 import { JobInterface } from '../types/job.interface';
 import { JobQueryParams } from '../types/query-params.interface';
 import { initialCount } from '../../../app.config';
@@ -11,6 +11,7 @@ export class JobSearchService {
   private foundJobs: JobInterface[] = [];
   private perPageCount: number = initialCount;
   private pageForView: number = 1;
+  private isLoadingSubject: Subject<boolean> = new Subject<boolean>();
   private queryParams: JobQueryParams = {};
   private jobsSubject: BehaviorSubject<JobInterface[]> = new BehaviorSubject<JobInterface[]>([]);
   private isAllJobsLoadedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -29,6 +30,10 @@ export class JobSearchService {
 
   get isJobNotFound(): Observable<boolean> {
     return this.isJobNotFoundSubject.asObservable();
+  }
+
+  get isLoading(): Observable<boolean> {
+    return this.isLoadingSubject.asObservable();
   }
 
   search(description: string): void {
@@ -56,9 +61,11 @@ export class JobSearchService {
   }
 
   private requestJobs(): Observable<JobInterface[]> {
+    this.isLoadingSubject.next(true);
     const params = this.queryParams as HttpParams;
     return this.http.get<JobInterface[]>(this.apiUrl, { params }).pipe(
-      tap((response) => this.handleSearchResponse(response))
+      tap((response) => this.handleSearchResponse(response)),
+      finalize(() => this.isLoadingSubject.next(false))
     );
   }
 

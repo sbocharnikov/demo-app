@@ -2,7 +2,7 @@
   <label for="position" class="search__label">Job description</label>
   <div class="search__group">
     <input type="search" class="search__input" id="position" formControlName="description">
-    <button type="submit" class="search__button">Search</button>
+    <button type="submit" class="search__button" [disabled]="isLoading | async">Search</button>
   </div>
   <label for="perPageCount" class="search__label">Jobs per page</label>
   <select name="perPageCount" id="perPageCount" formControlName="perPageCount">
@@ -18,6 +18,7 @@
 <button
   *ngIf="(jobs | async).length === perPageCount.value && !(isAllJobsLoaded | async)"
   class="button-more"
+  [disabled]="isLoading | async"
   (click)="loadMore()">
   Load more
 </button>
