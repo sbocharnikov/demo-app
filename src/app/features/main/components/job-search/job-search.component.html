@@ -16,11 +16,11 @@
   <p>{{job.type}}</p>
 </div>
 <button
-  *ngIf="(jobs | async).length === perPageCount.value && !(isAllJobsLoaded | async)"
+  *ngIf="(jobs | async).length === perPageCount.value && (isAllJobsLoaded | async) === false"
   class="button-more"
   [disabled]="isLoading | async"
   (click)="loadMore()">
   Load more
 </button>
-<p class="info" *ngIf="(isAllJobsLoaded | async)">All jobs have been loaded</p>
+<p class="info" *ngIf="isAllJobsLoaded | async">All jobs have been loaded</p>
 <p class="info" *ngIf="isJobNotFound | async">No jobs were found</p>
