@@ -1,7 +1,9 @@
 export enum NAVIGATE {
   LOGIN = 'login',
   MAIN = 'main',
-  PIN = 'pin'
+  PIN = 'pin',
+  SEARCH = 'search',
+  IMAGE_GENERATOR = 'generator'
 }
 
 export enum USER {

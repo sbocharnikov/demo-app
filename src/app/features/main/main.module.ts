@@ -6,6 +6,7 @@ import { JobSearchComponent } from './components/job-search/job-search.component
 import { ImageGeneratorComponent } from './components/image-generator/image-generator.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { NAVIGATE } from '../../app.config';
 
 const routes: Route[] = [
   {
@@ -13,15 +14,15 @@ const routes: Route[] = [
     component: MainComponent, children: [
       {
         path: '',
-        redirectTo: 'search',
+        redirectTo: NAVIGATE.SEARCH,
         pathMatch: 'full'
       },
       {
-        path: 'search',
+        path: NAVIGATE.SEARCH,
         component: JobSearchComponent
       },
       {
-        path: 'generator',
+        path: NAVIGATE.IMAGE_GENERATOR,
         component: ImageGeneratorComponent
       }
     ]
