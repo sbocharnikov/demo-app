@@ -1,0 +1,25 @@
+<form class="search" [formGroup]="searchForm" (ngSubmit)="search()">
+  <label for="position" class="search__label">Job description</label>
+  <div class="search__group">
+    <input type="search" class="search__input" id="position" formControlName="description">
+    <button type="submit" class="search__button">Search</button>
+  </div>
+  <label for="perPageCount" class="search__label">Jobs per page</label>
+  <select name="perPageCount" id="perPageCount" formControlName="perPageCount">
+    <option value="25">25</option>
+    <option value="50">50</option>
+  </select>
+</form>
+<div *ngFor="let job of (jobs | async); trackBy: trackById" class="job">
+  <h3>{{job.title}} at {{job.company}}</h3>
+  <p>{{job.location}}</p>
+  <p>{{job.type}}</p>
+</div>
+<button
+  *ngIf="(jobs | async).length === perPageCount.value && !(isAllJobsLoaded | async)"
+  class="button-more"
+  (click)="loadMore()">
+  Load more
+</button>
+<p class="info" *ngIf="(isAllJobsLoaded | async)">All jobs have been loaded</p>
+<p class="info" *ngIf="isJobNotFound | async">No jobs were found</p>

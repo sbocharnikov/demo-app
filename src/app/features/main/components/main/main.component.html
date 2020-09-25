@@ -1,13 +1,13 @@
 <div class="container">
   <aside class="sidebar">
     <ul class="sidebar__list">
-      <li class="sidebar__item">
+      <li class="sidebar__item" [routerLink]="['search']" routerLinkActive="sidebar__item--active">
         <svg class="sidebar__icon">
           <use href="../../../assets/icons/sprite.svg#search"></use>
         </svg>
         GitHub Jobs
       </li>
-      <li class="sidebar__item">
+      <li class="sidebar__item" [routerLink]="['generator']" routerLinkActive="sidebar__item--active">
         <svg class="sidebar__icon">
           <use href="../../../assets/icons/sprite.svg#image"></use>
         </svg>
@@ -15,6 +15,8 @@
       </li>
     </ul>
   </aside>
-  <main class="main">center</main>
+  <main class="main">
+    <router-outlet></router-outlet>
+  </main>
 </div>
 

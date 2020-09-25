@@ -21,6 +21,12 @@
     margin-bottom: 25px;
     cursor: pointer;
 
+    &--active {
+      color: darken($color-red, 15%);
+      fill: darken($color-red, 15%);
+      font-weight: 600;
+    }
+
     &:hover {
       color: lighten($color-dark, 10%);
       fill: lighten($color-dark, 10%);
@@ -37,7 +43,7 @@
 .main {
   width: 100%;
   margin-left: 10px;
+  padding: 10px;
   background-color: $color-white;
 }
-
 

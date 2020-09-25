@@ -11,3 +11,5 @@ export enum USER {
 }
 
 export const allowedKeys: string[] = ['Delete', 'Backspace', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Shift', 'Home', 'End'];
+
+export const initialCount = 25;
