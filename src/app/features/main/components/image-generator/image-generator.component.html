@@ -1,1 +1,10 @@
-<p>image-generator works!</p>
+<form class="search" [formGroup]="searchForm" (ngSubmit)="generate()">
+  <label for="description" class="search__label">Image description</label>
+  <div class="search__group">
+    <input type="search" class="search__input" id="description" formControlName="description" placeholder="Cat">
+    <button type="submit" class="search__button" [disabled]="isLoading | async">Generate</button>
+  </div>
+</form>
+<div class="output" *ngIf="image | async as data">
+  <img [src]="data" [alt]="imageAlt | async">
+</div>

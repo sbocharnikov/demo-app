@@ -1,7 +1,7 @@
 <form class="search" [formGroup]="searchForm" (ngSubmit)="search()">
   <label for="position" class="search__label">Job description</label>
   <div class="search__group">
-    <input type="search" class="search__input" id="position" formControlName="description">
+    <input type="search" class="search__input" id="position" formControlName="description" placeholder="Description">
     <button type="submit" class="search__button" [disabled]="isLoading | async">Search</button>
   </div>
   <label for="perPageCount" class="search__label">Jobs per page</label>

@@ -1,0 +1,23 @@
+@import "src/styles/variables";
+@import "src/styles/elements";
+
+.search {
+  &__group {
+    display: flex;
+    align-items: center;
+  }
+
+  &__input {
+    @extend .input;
+  }
+
+  &__button {
+    @extend .button;
+    margin-left: 15px;
+  }
+}
+
+.output {
+  text-align: center;
+  margin-top: 40px;
+}
